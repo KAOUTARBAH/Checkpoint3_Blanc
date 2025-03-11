@@ -60,8 +60,10 @@ ssh wilder@192.168.1.2
 ### Q.2.3.1 Quels sont les systèmes de fichiers actuellement montés ?
 - Lsblk
 - Df -h
-![lsblk](https://github.com/KAOUTARBAH/Checkpoint3_Blanc/blob/main/images/lsblk.png)
-![df](https://github.com/KAOUTARBAH/Checkpoint3_Blanc/blob/main/images/df.png)
+
+![lsblk](https://github.com/KAOUTARBAH/Checkpoint3_Blanc/blob/main/Images/lsblk.png)
+
+![df](https://github.com/KAOUTARBAH/Checkpoint3_Blanc/blob/main/Images/df.png)
 
 
 ### Q.2.3.2 Quel type de système de stockage ils utilisent ?
