@@ -6,13 +6,13 @@
 - Créez un nouvel utilisateur **Lionel Lemarchand** dans Active Directory avec les mêmes attributs que **Kelly Rhameur** (nom complet, identifiant, groupes, etc.).
 
 - Ajouter l'utilisateur : **Kelly Rhameur**
-- Ouvrez le Gestionnaire de serveur sur un serveur Windows et allez dans Outils > Utilisateurs et ordinateurs Active Directory.
-- Utilisateurs >  Nouveau > Utilisateur.
-- Allez dans l'onglet Membre de, puis cliquez sur Ajouter pour ajouter Kelly Rhameur à des groupes comme Utilisateurs.
+    - Ouvrez le Gestionnaire de serveur sur un serveur Windows et allez dans Outils > Utilisateurs et ordinateurs Active Directory.
+    - Utilisateurs >  Nouveau > Utilisateur.
+    - Allez dans l'onglet Membre de, puis cliquez sur Ajouter pour ajouter Kelly Rhameur à des groupes comme Utilisateurs.
 
 # Récupérer les attributs de Kelly Rhameur en utilisant le SamAccountName exact
 - code en powershel attributs.sh
-```sh
+```powershell
 $kelly = Get-ADUser -Identity "Kelly.Rhameur" -Properties *
 
 # Vérifiez si l'utilisateur Kelly a été récupéré correctement
@@ -39,20 +39,54 @@ if ($kelly) {
 
 ```
 
-
-
-
 ### Q.1.1.2 Créer une OU DeactivatedUsers et déplacer le compte désactivé de Kelly Rhameur dedans.
 - Créez une nouvelle **OU** (Organizational Unit) nommée **DeactivatedUsers**.
-- Déplacez le compte **Kelly Rhameur** dans cette nouvelle **OU**.
+
+    1. Dans le volet gauche, **cliquez droit** sur le domaine.
+    2. Sélectionnez **Nouveau > Unité organisationnelle**.
+    3. Dans la fenêtre **Nouvel objet – Unité organisationnelle**, entrez **DeactivatedUsers** comme nom de l'OU.
+    4. Cliquez sur **OK** pour créer l'OU.
+
+    ```powershell
+    New-ADOrganizationalUnit -Name "DeactivatedUsers" -Path "OU=ranka,DC=ranka,DC=fr"
+    ```
+
+- Déplacez le compte désactivé **Kelly Rhameur** dans cette nouvelle **OU**.
+    
+   1. Faites un **clic droit** sur le compte **Kelly Rhameur**, puis sélectionnez **Désactiver le compte**.
+   2. Faites un **clic droit** sur le compte **Kelly Rhameur**, puis sélectionnez **Déplacer**.
+   3. Dans la fenêtre **Déplacer**, sélectionnez l'OU **DeactivatedUsers** que vous venez de créer.
+   4. Cliquez sur **OK** pour déplacer le compte dans cette nouvelle OU.
+
+    ```powershell
+    # Désactiver le compte de Kelly Rhameur
+    Disable-ADAccount -Identity "Kelly.Rhameur"
+
+    # Déplacer le compte de Kelly Rhameur dans l'OU DeactivatedUsers
+    Move-ADObject -Identity "CN=Kelly Rhameur,CN=Users,DC=ranka,DC=fr" -TargetPath "OU=DeactivatedUsers,DC=ranka,DC=fr"
+
+    ```
 
 ### Q.1.1.3 Modifier le groupe de l'OU dans laquelle était Kelly Rhameur.
 - Modifiez les groupes associés à l'ancienne **OU** de Kelly Rhameur pour mettre à jour les membres ou groupes de sécurité.
+    - Créer un nouveau groupe **utilisateursDésactivé*
+
+    1. **Faites un clic droit** sur le compte **Kelly Rhameur**, puis sélectionnez **Propriétés**.
+    2. Allez dans l'onglet **Membres de** 
+    3. Cliquez sur **Ajouter** pour ajouter **Kelly Rhameur** à un nouveau groupe **utilisateursDésactivé**.
+    4. Pour supprimer **Kelly Rhameur** d’un groupe, sélectionnez le groupe et cliquez sur **Supprimer**.
+    5. Cliquez sur **OK** pour enregistrer les modifications.
 
 ### Q.1.1.4 Archiver le dossier de Kelly Rhameur et créer celui de Lionel Lemarchand.
 - Archivez le dossier personnel de **Kelly Rhameur**.
-- Créez un nouveau dossier pour **Lionel Lemarchand**.
+    ```powershell
+    Compress-Archive -Path "C:\Users\Kelly.Rhameur" -DestinationPath "C:\Users\Kelly.Rhameur.zip"
+    ```
 
+- Créez un nouveau dossier pour **Lionel Lemarchand**.
+    ```powershell
+    New-Item -Path "C:\Users" -Name "Lionel.Lemarchand" -ItemType "Directory"
+    ```
 ## Partie 2 : Restriction utilisateurs
 
 ### Q.1.2.1 Faire en sorte que l'utilisateur Gabriel Ghul ne puisse se connecter que du lundi au vendredi, de 7h à 17h.
