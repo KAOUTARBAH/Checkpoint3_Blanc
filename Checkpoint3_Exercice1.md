@@ -180,3 +180,30 @@ Move-ADObject -Identity "CN=Kelly Rhameur,CN=Users,DC=ranka,DC=fr" -TargetPath "
 
 ### Q.1.3.1 Créer une GPO Drive-Mount qui monte les lecteurs E: et F: sur les clients.
 - Créez une **GPO (Group Policy Object)** nommée **Drive-Mount** pour monter les lecteurs **E:** et **F:** sur les postes clients via la stratégie de groupe.
+
+- Créer une Nouvelle GPO  et Nommez-la "Drive-Mount" et cliquez sur OK.
+
+- Configurer le Mappage des Lecteurs Réseaux
+    - Faites un clic droit sur "Drive-Mount" et sélectionnez Modifier.
+    - Accédez à : Configuration utilisateur > Préférences > Paramètres Windows > Mappage de lecteurs.
+    - Faites un clic droit dans la fenêtre de droite et sélectionnez Nouveau > Lecteur mappé.
+
+- Ajouter le Lecteur E:
+    - Action : Créer
+    - Emplacement : \\WINSERV1\PartageE (remplacez avec le chemin du partage réseau)
+    - Attribuer la lettre : E:
+    - Reconnecter : Cochez cette option
+    - Exécuter dans le contexte de sécurité de l’utilisateur : Cochez cette option
+    - Cliquez sur OK.
+
+- Ajouter le Lecteur F:
+    - épétez la même procédure en choisissant la lettre F: et en mettant le bon chemin de partage.
+
+- Appliquer la GPO aux Utilisateurs :
+    - ermez l'éditeur de gestion des stratégies de groupe.
+    - Assurez-vous que la GPO est bien liée à l’OU contenant les utilisateurs ou les groupes qui doivent recevoir ces lecteurs.
+
+- Forcer la Mise à Jour et Vérifier
+    ```bash
+    gpupdate /force
+    ```
