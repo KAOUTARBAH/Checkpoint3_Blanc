@@ -78,6 +78,7 @@ securityfs on /sys/kernel/security type securityfs (rw,nosuid,nodev,noexec,relat
 tmpfs on /dev/shm type tmpfs (rw,nosuid,nodev,inode64)
 tmpfs on /run/lock type tmpfs (rw,nosuid,nodev,noexec,relatime,size=5120k,inode64)
 ```
+
 ![mont](https://github.com/KAOUTARBAH/Checkpoint3_Blanc/blob/main/Images/mount.png)
 
 ## Partie 4 : Sauvegardes
